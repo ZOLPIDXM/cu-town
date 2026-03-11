@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CU TOWN - Metaverse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700;900&display=swap');
+        body { 
+            font-family: 'Kanit', sans-serif; 
+            transition: background-image 0.5s ease-in-out; 
+            background-color: #FFB6C1; /* สีพื้นหลังสำรอง */
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 3px solid rgba(255, 255, 255, 0.9);
+            border-radius: 2rem;
+        }
+        .hidden-panel { display: none !important; }
+        .pop-animation { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .glow-pink { text-shadow: 0 0 20px rgba(255, 192, 203, 1), 0 0 40px rgba(255, 105, 180, 0.8); color: #fff; }
+        .choice-btn { transition: all 0.2s; border: 2px solid #FFD1DC; background: white; cursor: pointer; }
+        .choice-btn:hover { background-color: #FFF5F7; transform: scale(1.02); border-color: #FFB6C1; }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #FFB6C1; border-radius: 10px; }
+    </style>
+</head>
+<body id="main-body" class="h-screen w-screen overflow-hidden bg-cover bg-center text-gray-800" style="background-image: url('https://cdn.discordapp.com/attachments/1480241522694688928/1481274116219867146/main.png?ex=69b2b786&is=69b16606&hm=07cbac4333271672f44788c494f68050ea980926a52f8ed3842edf31dbf69c5d&');">
+
+    <div id="hud-coin" class="absolute top-6 left-6 z-50">
+        <div class="glass-panel px-6 py-2 flex items-center gap-3 text-xl font-black bg-white bg-opacity-90 shadow-lg">
+            <span class="text-3xl">🌸</span> 
+            <span class="text-pink-500">124,500</span> 
+            <span class="text-[10px] bg-pink-100 text-pink-500 border border-pink-200 px-3 py-1 rounded-full uppercase font-bold tracking-tighter">CU COIN</span>
+        </div>
+    </div>
+
+ <div class="absolute right-4 top-24 bottom-32 w-20 glass-panel flex flex-col items-center py-4 gap-4 overflow-y-visible z-40 bg-white bg-opacity-70 shadow-lg border-white">
+        <p class="text-[10px] font-black text-pink-400 mb-2">FRIENDS</p>
+        
+        <div onclick="toggleFriendPopup('popup-friend-1')" class="relative w-12 h-12 rounded-full bg-blue-100 border-2 border-white flex items-center justify-center text-2xl shadow-sm cursor-pointer hover:scale-110 transition">
+            👦<span class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></span>
+            <div id="popup-friend-1" class="hidden absolute right-14 bg-white p-3 rounded-xl shadow-xl border-2 border-pink-100 flex-col gap-2 w-32 z-50 cursor-default" onclick="event.stopPropagation();">
+                <p class="text-xs font-bold text-gray-600 text-center">อเล็กซ์</p>
+                <button onclick="changeLocation('friend_room2'); toggleFriendPopup('popup-friend-1');" class="bg-pink-100 text-pink-600 text-[10px] font-black py-2 rounded-lg hover:bg-pink-200 transition shadow-sm w-full">🏠 ไปเยี่ยมห้อง</button>
+            </div>
+        </div>
+
+        <div onclick="toggleFriendPopup('popup-friend-2')" class="relative w-12 h-12 rounded-full bg-pink-100 border-2 border-white flex items-center justify-center text-2xl shadow-sm cursor-pointer hover:scale-110 transition">
+            👧<span class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></span>
+            <div id="popup-friend-2" class="hidden absolute right-14 bg-white p-3 rounded-xl shadow-xl border-2 border-pink-100 flex-col gap-2 w-32 z-50 cursor-default" onclick="event.stopPropagation();">
+                <p class="text-xs font-bold text-gray-600 text-center">นานะ</p>
+                <button onclick="changeLocation('friend_room'); toggleFriendPopup('popup-friend-2');" class="bg-pink-100 text-pink-600 text-[10px] font-black py-2 rounded-lg hover:bg-pink-200 transition shadow-sm w-full">🏠 ไปเยี่ยมห้อง</button>
+            </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-full bg-gray-100 border-2 border-white flex items-center justify-center text-2xl shadow-sm cursor-not-allowed opacity-50 relative">
+            🤖<span class="absolute bottom-0 right-0 w-3 h-3 bg-gray-400 rounded-full border-2 border-white"></span>
+        </div>
+    </div>
+
+    <div id="center-clock-area" class="absolute inset-0 flex flex-col items-center justify-center z-0 pointer-events-none mt-[-100px]">
+        <h1 id="clock" class="text-9xl font-black glow-pink tracking-widest drop-shadow-2xl">00:00:00</h1>
+        <p id="location-name" class="text-3xl font-black text-white tracking-[0.4em] mt-4 opacity-100 drop-shadow-lg bg-pink-400 bg-opacity-50 px-6 py-2 rounded-full border-2 border-white">CU TOWN</p>
+    </div>
+
+    <div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+        
+        <div id="panel-M" class="hidden-panel glass-panel w-[500px] p-8 pointer-events-auto text-center shadow-2xl">
+            <h2 class="text-3xl font-black text-pink-500 mb-6">🗺️ แผนที่ CU TOWN</h2>
+            <div class="grid grid-cols-1 gap-4">
+                <button onclick="changeLocation('city')" class="p-4 bg-white rounded-2xl font-bold text-gray-600 hover:bg-pink-50 border-2 border-pink-100 transition flex items-center gap-4 text-lg shadow-sm">🏙️ เมืองหลัก (Main City)</button>
+                <button onclick="changeLocation('park')" class="p-4 bg-white rounded-2xl font-bold text-gray-600 hover:bg-green-50 border-2 border-green-100 transition flex items-center gap-4 text-lg shadow-sm">🌳 สวนสาธารณะ (Park)</button>
+                <button onclick="changeLocation('library')" class="p-4 bg-white rounded-2xl font-bold text-gray-600 hover:bg-blue-50 border-2 border-blue-100 transition flex items-center gap-4 text-lg shadow-sm">📚 ห้องสมุด (Library)</button>
+            </div>
+        </div>
+
+        <div id="panel-P" class="hidden-panel glass-panel w-[450px] p-8 pointer-events-auto shadow-2xl">
+            <h2 class="text-3xl font-black text-pink-500 mb-6 text-center">🏠 พื้นที่ & ออนไลน์</h2>
+            <div class="flex flex-col gap-3">
+                <button onclick="changeLocation('room')" class="py-4 bg-white rounded-xl border-2 border-pink-200 font-black text-pink-500 hover:bg-pink-50 transition text-lg shadow-sm flex justify-center items-center gap-2">🛏️ ห้องของฉัน</button>
+                <button class="py-4 bg-white rounded-xl border-2 border-pink-200 font-black text-pink-500 hover:bg-pink-50 transition text-lg shadow-sm flex justify-center items-center gap-2">⚙️ แก้ไขตกแต่งห้อง</button>
+                
+                <hr class="border-pink-200 my-4">
+                
+                <p class="text-center font-bold text-gray-400 text-sm mb-2">🌍 ระบบเยี่ยมชมห้องออนไลน์</p>
+                <button onclick="changeLocation('random_room')" class="py-3 bg-blue-50 rounded-xl border-2 border-blue-200 font-black text-blue-500 hover:bg-blue-100 transition text-lg shadow-sm flex justify-center items-center gap-2">🔍 สุ่มเยี่ยมห้องคนอื่น</button>
+                
+                <div class="flex gap-2 mt-2">
+                    <input type="text" placeholder="ใส่ ID ห้องเพื่อน..." class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 outline-none focus:border-pink-400 font-bold text-gray-600 bg-white">
+                    <button onclick="changeLocation('friend_room')" class="px-6 bg-green-400 text-white rounded-xl font-black shadow-sm hover:bg-green-500 transition">ไป!</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="panel-B" class="hidden-panel glass-panel w-[650px] h-[70vh] p-8 pointer-events-auto flex flex-col shadow-2xl">
+            <h2 class="text-3xl font-black text-pink-500 mb-4 text-center">🛍️ ร้านค้า CU TOWN</h2>
+            <div id="shop-container" class="grid grid-cols-2 gap-4 overflow-y-auto pr-2 pb-4">
+                </div>
+        </div>
+
+        <div id="panel-E" class="hidden-panel glass-panel w-[500px] p-8 pointer-events-auto shadow-2xl">
+            <h2 class="text-3xl font-black text-pink-500 mb-2 text-center uppercase">Learn & Earn</h2>
+            <p class="text-center text-pink-400 mb-6 font-bold italic">เลือกวิชาสอบเพื่อรับ CU COIN</p>
+            
+            <div class="flex flex-col gap-4">
+                <div class="bg-white rounded-3xl p-5 border-2 border-pink-200 shadow-sm cursor-pointer hover:border-pink-400 hover:bg-pink-50 transition" onclick="startQuiz('math')">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 bg-blue-400 rounded-2xl flex items-center justify-center text-3xl text-white shadow-md">📐</div>
+                        <div>
+                            <h3 class="font-black text-xl text-gray-700">A-Level Math</h3>
+                            <p class="text-sm text-pink-500 font-bold">5 ข้อ • 1,000 CU COIN</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-3xl p-5 border-2 border-pink-200 shadow-sm cursor-pointer hover:border-pink-400 hover:bg-pink-50 transition" onclick="startQuiz('english')">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 bg-purple-400 rounded-2xl flex items-center justify-center text-3xl text-white shadow-md">🔤</div>
+                        <div>
+                            <h3 class="font-black text-xl text-gray-700">A-Level English</h3>
+                            <p class="text-sm text-pink-500 font-bold">10 ข้อ • 2,000 CU COIN</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="bottom-nav" class="absolute bottom-8 left-0 right-0 flex justify-center z-30 pointer-events-none">
+        <div class="glass-panel p-4 flex gap-6 bg-white bg-opacity-80 rounded-[3rem] shadow-2xl pointer-events-auto items-end border-4 border-white">
+            
+            <div class="flex flex-col items-center justify-end mr-4 relative pb-2 group">
+                <div class="w-24 h-32 bg-gradient-to-t from-pink-200 to-pink-50 rounded-[2rem] border-4 border-white shadow-lg flex flex-col items-center justify-center relative mb-4 hover:scale-105 transition cursor-pointer">
+                    <span class="text-6xl mt-2">🧍‍♀️</span>
+                    <span class="absolute top-2 right-2 bg-green-400 w-4 h-4 rounded-full border-2 border-white shadow-sm"></span>
+                </div>
+                <button onclick="alert('กำลังเปิดตู้เสื้อผ้า...')" class="absolute -bottom-2 bg-pink-500 text-white text-[12px] font-black px-5 py-2 rounded-full shadow-lg hover:bg-pink-600 transition border-2 border-white whitespace-nowrap active:scale-95">
+                    👕 เปลี่ยนชุด
+                </button>
+            </div>
+
+            <button onclick="togglePanel('M')" class="w-24 h-24 mb-2 rounded-[2rem] font-black flex flex-col items-center justify-center bg-pink-50 text-pink-400 hover:bg-pink-200 hover:-translate-y-2 transition shadow-md border-2 border-white"><span class="text-3xl mb-1">M</span><span class="text-xs">แผนที่</span></button>
+            <button onclick="togglePanel('P')" class="w-24 h-24 mb-2 rounded-[2rem] font-black flex flex-col items-center justify-center bg-pink-50 text-pink-400 hover:bg-pink-200 hover:-translate-y-2 transition shadow-md border-2 border-white"><span class="text-3xl mb-1">P</span><span class="text-xs">พื้นที่</span></button>
+            <button onclick="togglePanel('B')" class="w-24 h-24 mb-2 rounded-[2rem] font-black flex flex-col items-center justify-center bg-pink-50 text-pink-400 hover:bg-pink-200 hover:-translate-y-2 transition shadow-md border-2 border-white"><span class="text-3xl mb-1">B</span><span class="text-xs">ร้านค้า</span></button>
+            <button onclick="togglePanel('E')" class="w-24 h-24 mb-2 rounded-[2rem] font-black flex flex-col items-center justify-center bg-pink-400 text-white hover:bg-pink-500 hover:-translate-y-2 transition shadow-md border-2 border-white shadow-pink-300"><span class="text-3xl mb-1">E</span><span class="text-xs">สอบรับคอยน์</span></button>
+        </div>
+    </div>
+
+    <div id="quiz-screen" class="hidden fixed inset-0 z-[100] bg-pink-50 flex items-center justify-center p-6 overflow-hidden">
+        <div class="w-full max-w-5xl h-full flex flex-col">
+            <div class="flex justify-between items-center mb-4 shrink-0">
+                <h2 id="quiz-title" class="text-3xl font-black text-pink-500 tracking-tighter uppercase">Examination</h2>
+                <button onclick="closeQuiz()" class="bg-white border-2 border-pink-200 text-pink-400 px-6 py-2 rounded-2xl font-bold hover:bg-pink-100 transition shadow-sm">ออกจากการสอบ</button>
+            </div>
+
+            <div class="bg-white rounded-[2rem] shadow-xl p-8 border-4 border-white relative flex-1 overflow-y-auto flex flex-col">
+                <div class="absolute top-4 right-6 bg-pink-400 text-white px-6 py-1 rounded-full font-black text-sm shadow-md">ข้อที่ <span id="q-num">1</span></div>
+                
+                <div id="passage-container" class="hidden mb-6 p-6 bg-blue-50 rounded-2xl border border-blue-100 text-gray-700 text-lg leading-relaxed shadow-inner font-medium"></div>
+
+                <div class="mt-4 flex-1">
+                    <p id="question-text" class="text-2xl font-bold text-gray-800 leading-relaxed mb-6">โจทย์...</p>
+                    <div id="choices" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        </div>
+                </div>
+
+                <div id="solution-box" class="hidden mt-6 p-6 bg-pink-50 rounded-2xl border-2 border-pink-200 shrink-0">
+                    <p class="text-xl font-black text-pink-500 mb-2">เฉลยและคำอธิบาย:</p>
+                    <p id="solution-text" class="text-lg text-gray-600 mb-6 font-bold">...</p>
+                    <button onclick="nextQuestion()" class="w-full py-4 bg-pink-400 text-white rounded-xl font-black text-xl hover:bg-pink-500 shadow-md transition">ข้อต่อไป ➡️</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. ระบบสถานที่ (ลิงก์ภาพธีมการ์ตูนสดใส / ภาพจำลอง)
+        const locations = {
+            'city': { name: 'CU TOWN', url: 'https://cdn.discordapp.com/attachments/1480241522694688928/1481274116219867146/main.png?ex=69b2b786&is=69b16606&hm=07cbac4333271672f44788c494f68050ea980926a52f8ed3842edf31dbf69c5d&' },
+            'room': { name: 'ห้องส่วนตัวของฉัน', url: 'https://cdn.discordapp.com/attachments/1480241522694688928/1481279525697486939/file_0000000074c0720899942f76d00d6088.png?ex=69b2bc8f&is=69b16b0f&hm=b0e8f4a810d8993fd03af0788ab880ae09081b94356899f97c1cff6735a77273&' },
+            'park': { name: 'สวนสาธารณะ CU', url: 'https://cdn.discordapp.com/attachments/1480241522694688928/1481276024116215938/image0.png?ex=69b2b94c&is=69b167cc&hm=017fe2c94cd23453d17b0e8d492e87b5be9f3d78829c7c8bd64e4a20f9f3f8a0&' },
+            'library': { name: 'หอสมุดกลาง', url: 'https://cdn.discordapp.com/attachments/1480241522694688928/1481282477569081527/file_00000000a3907208b34e2ea1fe7c3f1e.png?ex=69b2bf4f&is=69b16dcf&hm=4d8dcb52159f61674efae5777dc94a146456d425dfef6cb6b3ddedb6abc4320e&' },
+            'friend_room': { name: 'บ้านนานะ', url: 'https://cdn.discordapp.com/attachments/1480241522694688928/1481280067228405891/file_000000002e587208ae4c90ccf38da0c7.png?ex=69b2bd10&is=69b16b90&hm=2a6f833b3500161524c5fdb150308146dc7fe264f370b1e6fbeb54caefac81e8&' },
+                        'friend_room2': { name: 'บ้านอเล็กซ์', url: 'https://cdn.discordapp.com/attachments/1480241522694688928/1481280702552215729/file_0000000097ec72088ed9164a05f5a3b6.png?ex=69b2bda8&is=69b16c28&hm=79be33cdc5fcd4bef98079d4dd2547fbf81c7a4da385d37f0593ef99e236e2dd&' },
+            'random_room': { name: 'ห้องสาธารณะ', url: 'https://cdn.discordapp.com/attachments/1480241522694688928/1481281619917541487/file_0000000056d87208b6b6eb372218d234.png?ex=69b2be83&is=69b16d03&hm=8381f85e5f1f5f6de0c6c6d1613b40627d4c05eddfd8f33fbe166aff15dd2b75&' }
+        };
+
+        function changeLocation(loc) {
+            document.getElementById('main-body').style.backgroundImage = `url('${locations[loc].url}')`;
+            document.getElementById('location-name').innerText = locations[loc].name;
+            togglePanel(null); // ปิดหน้าต่างลง
+            
+            if(loc === 'friend_room') alert("✨ กำลังวาร์ปไปห้องเพื่อน...");
+            if(loc === 'random_room') alert("🔍 กำลังสุ่มหาห้องออนไลน์...");
+        }
+
+        // 2. ระบบเปิด/ปิดหน้าต่าง M, P, B, E
+        function togglePanel(panelId) {
+            ['M', 'P', 'B', 'E'].forEach(id => {
+                const el = document.getElementById(`panel-${id}`);
+                if (id === panelId) {
+                    el.classList.toggle('hidden-panel');
+                    el.classList.add('pop-animation');
+                } else {
+                    el.classList.add('hidden-panel');
+                }
+            });
+        }
+
+        // 3. ระบบร้านค้า 20 ชิ้น (เต็มรูปแบบไม่มีตัด)
+        const shopItems = [
+            { name: 'เตียงเจ้าหญิง', type: 'เฟอร์นิเจอร์', price: 1200, icon: '🛏️' },
+            { name: 'โซฟาพาสเทล', type: 'เฟอร์นิเจอร์', price: 800, icon: '🛋️' },
+            { name: 'โคมไฟเรืองแสง', type: 'เฟอร์นิเจอร์', price: 300, icon: '💡' },
+            { name: 'โต๊ะทำงานกระจก', type: 'เฟอร์นิเจอร์', price: 900, icon: '🪑' },
+            { name: 'ชั้นวางหนังสือ', type: 'เฟอร์นิเจอร์', price: 600, icon: '📚' },
+            { name: 'ต้นไม้ประดับ', type: 'ตกแต่ง', price: 250, icon: '🪴' },
+            { name: 'ทีวีโฮโลแกรม', type: 'เฟอร์นิเจอร์', price: 2000, icon: '📺' },
+            { name: 'ตู้เสื้อผ้าไม้', type: 'เฟอร์นิเจอร์', price: 750, icon: '🚪' },
+            { name: 'พรมขนนุ่ม', type: 'ตกแต่ง', price: 400, icon: '🧶' },
+            { name: 'อ่างอาบน้ำหินอ่อน', type: 'เฟอร์นิเจอร์', price: 1500, icon: '🛁' },
+            { name: 'ชุดเดรสสีชมพู', type: 'เสื้อผ้า', price: 500, icon: '👗' },
+            { name: 'เสื้อฮู้ดหูแมว', type: 'เสื้อผ้า', price: 450, icon: '🧥' },
+            { name: 'รองเท้าผ้าใบมีปีก', type: 'เสื้อผ้า', price: 600, icon: '👟' },
+            { name: 'แว่นตากันแดดหัวใจ', type: 'แฟชั่น', price: 150, icon: '🕶️' },
+            { name: 'หมวกเบเร่ต์น่ารัก', type: 'แฟชั่น', price: 200, icon: '🧢' },
+            { name: 'กระเป๋าสะพายข้าง', type: 'แฟชั่น', price: 350, icon: '👜' },
+            { name: 'ชุดสูทพาสเทล', type: 'เสื้อผ้า', price: 800, icon: '👔' },
+            { name: 'กางเกงยีนส์แฟชั่น', type: 'เสื้อผ้า', price: 400, icon: '👖' },
+            { name: 'สร้อยคอคริสตัล', type: 'แฟชั่น', price: 1200, icon: '💎' },
+            { name: 'ปีกนางฟ้าดิจิทัล', type: 'ไอเทมพิเศษ', price: 5000, icon: '✨' }
+        ];
+
+        const shopContainer = document.getElementById('shop-container');
+        shopItems.forEach(item => {
+            shopContainer.innerHTML += `
+                <div class="bg-white p-4 rounded-2xl border-2 border-pink-100 flex items-center gap-4 hover:border-pink-300 transition shadow-sm cursor-pointer">
+                    <div class="text-4xl bg-pink-50 w-16 h-16 rounded-xl flex items-center justify-center border border-pink-100">${item.icon}</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-gray-800">${item.name}</h4>
+                        <p class="text-[10px] text-gray-400 font-bold">${item.type}</p>
+                        <p class="text-pink-500 font-black text-sm mt-1">${item.price} CU</p>
+                    </div>
+                </div>
+            `;
+        });
+
+        // 4. ข้อมูลข้อสอบ A-Level Math (5 ข้อ)
+        const mathQuestions = [
+            { q: "1. จงหาเซตคำตอบของอสมการ log2(x+3) + log2(x-1) <= 5", a: "(1, 5]", hint: "ยุบรวม log เป็น log2((x+3)(x-1)) <= 5 จะได้ (x+3)(x-1) <= 32 ย้ายข้างได้ x^2 + 2x - 35 <= 0 แยกตัวประกอบเป็น (x+7)(x-5) <= 0 ได้ช่วง -7 ถึง 5 แต่เงื่อนไขหลัง log คือ x+3>0 และ x-1>0 (นั่นคือ x > 1)", choices: ["(-7, 5]", "(1, 5]", "[-3, 5]", "(1, 32]"] },
+            { q: "2. ลำดับเลขคณิตหนึ่งมี a5 = 19 และ a10 = 39 จงหาผลรวม 20 พจน์แรก (S20)", a: "820", hint: "หา d จาก a10 - a5 = 5d จะได้ 39 - 19 = 5d => d = 4. หา a1 จาก a5 = a1 + 4d => 19 = a1 + 16 => a1 = 3. ใช้สูตร S20 = 20/2 [2(3) + (19)(4)] = 10[6 + 76] = 820", choices: ["780", "800", "820", "840"] },
+            { q: "3. โยนเหรียญที่เที่ยงตรง 3 เหรียญพร้อมกัน 1 ครั้ง ความน่าจะเป็นที่เหรียญจะออกหัวอย่างน้อย 2 เหรียญเป็นเท่าใด", a: "0.5", hint: "Sample Space ทั้งหมดคือ 8 แบบ เหตุการณ์ที่สนใจคือออกหัว 2 หรือ 3 เหรียญ ได้แก่ {HHT, HTH, THH, HHH} รวม 4 แบบ ดังนั้น 4/8 = 0.5", choices: ["0.25", "0.375", "0.5", "0.75"] },
+            { q: "4. ข้อมูลชุดหนึ่งคือ 2, 5, 5, 8, 10, 12 ถ้าเพิ่มข้อมูล x เข้าไปอีกตัวหนึ่งแล้วทำให้ค่าเฉลี่ยใหม่เท่ากับ 7 จงหาค่า x", a: "7", hint: "ข้อมูลเดิมรวมกันได้ 42 เมื่อเพิ่ม x จะมีข้อมูล 7 ตัว ตั้งสมการ (42+x)/7 = 7 จะได้ 42+x = 49 ดังนั้น x = 7", choices: ["6", "7", "8", "9"] },
+            { q: "5. กำหนด f(x) = x^3 - 3x^2 + 4 จงหาค่าต่ำสุดสัมพัทธ์ของฟังก์ชันนี้", a: "0", hint: "หาอนุพันธ์ f'(x) = 3x^2 - 6x = 0 ได้ x = 0 หรือ 2. ตรวจสอบด้วย f''(x) = 6x - 6 พบว่า f''(2) = 6 (ค่าบวก แปลว่าเป็นจุดต่ำสุด) แทนค่า f(2) = 8 - 12 + 4 = 0", choices: ["-2", "0", "2", "4"] }
+        ];
+
+        // 5. ข้อมูลข้อสอบ A-Level English (10 ข้อ)
+        const englishPassage1 = "Soft power, __(1)__ as the ability to influence others through attraction and persuasion rather than force, __(2)__ a vital role in international relations. It is characterized by the use of cultural, economic, and diplomatic means to shape global perceptions. __(3)__ traditional hard power, soft power relies on shared values and appeal, making it more lasting. In today's interconnected world, countries are increasingly recognizing the importance of soft power in achieving their foreign policy goals. The question of __(4)__ soft power to boost their global standing is increasingly relevant. The answer lies in promoting its cultural heritage, building strong diplomatic relationships, and __(5)__ such as democracy and human rights.";
+        
+        const englishPassage2 = "While stress is typically viewed negatively, it can __(6)__ on students when __(7)__ in moderation. A moderate level of stress can serve as a motivational factor, prompting students to enhance their focus and productivity. Moreover, stress can stimulate the release of adrenaline, __(8)__ helps improve cognitive function and alertness. It is essential, however, __(9)__ a balance, as excessive stress may lead to burnout and negatively impact overall well-being. Therefore, utilizing stress in a balanced manner can __(10)__ a student's academic and personal development.";
+
+        const englishQuestions = [
+            { passage: englishPassage1, q: "1) Fill in the blank (1)", a: "which is often described", hint: "Ans. D. which is often described (ลดรูปมาจาก Soft power, which is often described as...)", choices: ["often describes", "is often described", "which often describes", "which is often described"] },
+            { passage: englishPassage1, q: "2) Fill in the blank (2)", a: "plays", hint: "Ans. C. plays (ใช้คู่กับ a vital role in = มีบทบาทสำคัญใน)", choices: ["does", "uses", "plays", "makes"] },
+            { passage: englishPassage1, q: "3) Fill in the blank (3)", a: "Unlike", hint: "Ans. A. Unlike (แปลว่า 'แตกต่างจาก' ใช้เปรียบเทียบกับ hard power)", choices: ["Unlike", "Contrary", "Opposite", "Dissimilar"] },
+            { passage: englishPassage1, q: "4) Fill in the blank (4)", a: "how nations use", hint: "Ans. A. how nations use (Noun Clause เรียงประโยคแบบ Subject + Verb)", choices: ["how nations use", "how nation uses", "how do nations use", "how does nations use"] },
+            { passage: englishPassage1, q: "5) Fill in the blank (5)", a: "championing universal values", hint: "Ans. C. championing universal values (ต้องเป็น V.ing เพื่อให้ขนานกับ promoting และ building ด้านหน้า)", choices: ["champion universal values", "championed universal values", "championing universal values", "champions of universal values"] },
+            { passage: englishPassage2, q: "6) Fill in the blank (6)", a: "have positive effects", hint: "Ans. C. have positive effects (หลัง can เป็น v.infinitive และ effect เป็นคำนามที่ถูกต้อง)", choices: ["positively effect", "positively affect", "have positive effects", "have positive affects"] },
+            { passage: englishPassage2, q: "7) Fill in the blank (7)", a: "experienced", hint: "Ans. C. experienced (ลดรูปประโยค Passive Voice = when it is experienced)", choices: ["experience", "experiences", "experienced", "experiencing"] },
+            { passage: englishPassage2, q: "8) Fill in the blank (8)", a: "which", hint: "Ans. D. which (Relative pronoun แทนคำว่า adrenaline ซึ่งเป็นสารเคมี)", choices: ["that", "who", "whose", "which"] },
+            { passage: englishPassage2, q: "9) Fill in the blank (9)", a: "to maintain", hint: "Ans. A. to maintain (It is essential + to infinitive)", choices: ["to maintain", "that maintains", "to maintaining", "that maintaining"] },
+            { passage: englishPassage2, q: "10) Fill in the blank (10)", a: "contribute to", hint: "Ans. D. contribute to (แปลว่า ก่อให้เกิด หรือ มีส่วนช่วยพัฒนา...)", choices: ["base on", "stem from", "come about", "contribute to"] }
+        ];
+
+        // 6. ระบบควบคุมการสอบ
+        let currentQuizData = [];
+        let currentQ = 0;
+
+        function startQuiz(subject) {
+            document.getElementById('quiz-title').innerText = subject === 'math' ? 'A-Level Math' : 'A-Level English';
+            currentQuizData = subject === 'math' ? mathQuestions : englishQuestions;
+            currentQ = 0;
+            
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            document.getElementById('bottom-nav').classList.add('hidden');
+            document.getElementById('center-clock-area').classList.add('hidden');
+            document.getElementById('hud-coin').classList.add('hidden'); 
+            togglePanel(null); 
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const data = currentQuizData[currentQ];
+            document.getElementById('q-num').innerText = currentQ + 1;
+            document.getElementById('question-text').innerText = data.q;
+            document.getElementById('solution-box').classList.add('hidden');
+            
+            const passageDiv = document.getElementById('passage-container');
+            if (data.passage) {
+                passageDiv.innerHTML = data.passage;
+                passageDiv.classList.remove('hidden');
+            } else {
+                passageDiv.classList.add('hidden');
+            }
+
+            const choicesDiv = document.getElementById('choices');
+            choicesDiv.innerHTML = '';
+            data.choices.forEach(c => {
+                const btn = document.createElement('button');
+                btn.className = "choice-btn p-5 rounded-2xl text-xl font-bold text-gray-700 shadow-sm text-left";
+                btn.innerText = c;
+                btn.onclick = () => checkAnswer(c);
+                choicesDiv.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(ans) {
+            const data = currentQuizData[currentQ];
+            if(ans === data.a) {
+                document.getElementById('solution-text').innerText = data.hint;
+                document.getElementById('solution-box').classList.remove('hidden');
+                document.querySelector('#quiz-screen > div > div:nth-child(2)').scrollTo({ top: 1000, behavior: 'smooth' });
+            } else { 
+                alert("❌ คำตอบยังไม่ถูก ลองพิจารณาใหม่อีกนิดนะครับ!"); 
+            }
+        }
+
+        function nextQuestion() {
+            currentQ++;
+            if(currentQ < currentQuizData.length) { 
+                showQuestion(); 
+            } else { 
+                alert("🎉 ยินดีด้วย! คุณทำข้อสอบครบทั้งหมดแล้ว รับ CU COIN เข้ากระเป๋าไปเลย!"); 
+                closeQuiz(); 
+            }
+        }
+
+        function closeQuiz() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('bottom-nav').classList.remove('hidden');
+            document.getElementById('center-clock-area').classList.remove('hidden');
+            document.getElementById('hud-coin').classList.remove('hidden');
+        }
+
+        // 7. นาฬิกาทำงานแบบ Real-time
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }, 1000);
+               // 8. ระบบคลิกเปิด/ปิด หน้าต่างเพื่อน
+        function toggleFriendPopup(popupId) {
+            const popup = document.getElementById(popupId);
+            
+            // ปิด popup ของเพื่อนคนอื่นก่อน (ถ้ามีเปิดค้างไว้)
+            document.querySelectorAll('[id^="popup-friend-"]').forEach(el => {
+                if (el.id !== popupId) {
+                    el.classList.add('hidden');
+                    el.classList.remove('flex');
+                }
+            });
+
+            // สลับสถานะ เปิด/ปิด ของคนที่คลิก
+            if (popup.classList.contains('hidden')) {
+                popup.classList.remove('hidden');
+                popup.classList.add('flex');
+            } else {
+                popup.classList.add('hidden');
+                popup.classList.remove('flex');
+            }
+        }
+    </script>
+</body>
+</html>
