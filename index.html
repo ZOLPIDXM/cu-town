@@ -31,7 +31,7 @@
         ::-webkit-scrollbar-thumb { background: #FFB6C1; border-radius: 10px; }
     </style>
 </head>
-<body id="main-body" class="h-screen w-screen overflow-hidden bg-cover bg-center text-gray-800" style="background-image: url('./pics/main.png');">
+<body id="main-body" class="h-screen w-screen overflow-hidden bg-cover bg-center text-gray-800" style="background-image: url('pics/main.png');">
 
     <div id="hud-coin" class="absolute top-6 left-6 z-50">
         <div class="glass-panel px-6 py-2 flex items-center gap-3 text-xl font-black bg-white bg-opacity-90 shadow-lg">
@@ -183,17 +183,17 @@
     <script>
         // 1. ระบบสถานที่ (ลิงก์ภาพธีมการ์ตูนสดใส / ภาพจำลอง)
         const locations = {
-            'city': { name: 'CU TOWN', src: './pics/main.png' },
-            'room': { name: 'ห้องส่วนตัวของฉัน', src: './pics/myroom.png' },
-            'park': { name: 'สวนสาธารณะ CU', src: './pics/park.png' },
-            'library': { name: 'หอสมุดกลาง', src: './pics/library.png' },
-            'friend_room': { name: 'บ้านนานะ', src: './pics/friendroom.png' },
-            'friend_room2': { name: 'บ้านอเล็กซ์', src: './pics/friendroom2.png' },
-            'random_room': { name: 'ห้องสาธารณะ', src: './pics/puzzle.png' }
+            'city': { name: 'CU TOWN', src: 'pics/main.png' },
+            'room': { name: 'ห้องส่วนตัวของฉัน', src: 'pics/myroom.png' },
+            'park': { name: 'สวนสาธารณะ CU', src: 'pics/park.png' },
+            'library': { name: 'หอสมุดกลาง', src: 'pics/library.png' },
+            'friend_room': { name: 'บ้านนานะ', src: 'pics/friendroom.png' },
+            'friend_room2': { name: 'บ้านอเล็กซ์', src: 'pics/friendroom2.png' },
+            'random_room': { name: 'ห้องสาธารณะ', src: 'pics/puzzle.png' }
         };
 
         function changeLocation(loc) {
-            document.getElementById('main-body').style.backgroundImage = `url('${locations[loc].src}')`;
+            document.getElementById('main-body').style.backgroundImage = `url('${locations[loc].url}')`;
             document.getElementById('location-name').innerText = locations[loc].name;
             togglePanel(null); // ปิดหน้าต่างลง
             
