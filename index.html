@@ -193,7 +193,7 @@
         };
 
         function changeLocation(loc) {
-            document.getElementById('main-body').style.backgroundImage = `url('${locations[loc].url}')`;
+            document.getElementById('main-body').style.backgroundImage = `url('${locations[loc].src}')`;
             document.getElementById('location-name').innerText = locations[loc].name;
             togglePanel(null); // ปิดหน้าต่างลง
             
