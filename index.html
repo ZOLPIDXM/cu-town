@@ -31,7 +31,7 @@
         ::-webkit-scrollbar-thumb { background: #FFB6C1; border-radius: 10px; }
     </style>
 </head>
-<body id="main-body" class="h-screen w-screen overflow-hidden bg-cover bg-center text-gray-800" style="background-image: url('https://cdn.discordapp.com/attachments/1480241522694688928/1481274116219867146/main.png?ex=69b2b786&is=69b16606&hm=07cbac4333271672f44788c494f68050ea980926a52f8ed3842edf31dbf69c5d&');">
+<body id="main-body" class="h-screen w-screen overflow-hidden bg-cover bg-center text-gray-800" style="background-image: url('./pics/main.png');">
 
     <div id="hud-coin" class="absolute top-6 left-6 z-50">
         <div class="glass-panel px-6 py-2 flex items-center gap-3 text-xl font-black bg-white bg-opacity-90 shadow-lg">
@@ -183,13 +183,13 @@
     <script>
         // 1. ระบบสถานที่ (ลิงก์ภาพธีมการ์ตูนสดใส / ภาพจำลอง)
         const locations = {
-            'city': { name: 'CU TOWN', src: 'pics/main.png' },
-            'room': { name: 'ห้องส่วนตัวของฉัน', src: 'pics/myroom.png' },
-            'park': { name: 'สวนสาธารณะ CU', src: 'pics/park.png' },
-            'library': { name: 'หอสมุดกลาง', src: 'pics/library.png' },
-            'friend_room': { name: 'บ้านนานะ', src: 'pics/friendroom.png' },
-            'friend_room2': { name: 'บ้านอเล็กซ์', src: 'pics/friendroom2.png' },
-            'random_room': { name: 'ห้องสาธารณะ', src: 'pics/puzzle.png' }
+            'city': { name: 'CU TOWN', src: './pics/main.png' },
+            'room': { name: 'ห้องส่วนตัวของฉัน', src: './pics/myroom.png' },
+            'park': { name: 'สวนสาธารณะ CU', src: './pics/park.png' },
+            'library': { name: 'หอสมุดกลาง', src: './pics/library.png' },
+            'friend_room': { name: 'บ้านนานะ', src: './pics/friendroom.png' },
+            'friend_room2': { name: 'บ้านอเล็กซ์', src: './pics/friendroom2.png' },
+            'random_room': { name: 'ห้องสาธารณะ', src: './pics/puzzle.png' }
         };
 
         function changeLocation(loc) {
