@@ -183,17 +183,17 @@
     <script>
         // 1. ระบบสถานที่ (ลิงก์ภาพธีมการ์ตูนสดใส / ภาพจำลอง)
         const locations = {
-            'city': { name: 'CU TOWN', url: 'https://cdn.discordapp.com/attachments/1480241522694688928/1481274116219867146/main.png?ex=69b2b786&is=69b16606&hm=07cbac4333271672f44788c494f68050ea980926a52f8ed3842edf31dbf69c5d&' },
-            'room': { name: 'ห้องส่วนตัวของฉัน', url: 'https://cdn.discordapp.com/attachments/1480241522694688928/1481279525697486939/file_0000000074c0720899942f76d00d6088.png?ex=69b2bc8f&is=69b16b0f&hm=b0e8f4a810d8993fd03af0788ab880ae09081b94356899f97c1cff6735a77273&' },
-            'park': { name: 'สวนสาธารณะ CU', url: 'https://cdn.discordapp.com/attachments/1480241522694688928/1481276024116215938/image0.png?ex=69b2b94c&is=69b167cc&hm=017fe2c94cd23453d17b0e8d492e87b5be9f3d78829c7c8bd64e4a20f9f3f8a0&' },
-            'library': { name: 'หอสมุดกลาง', url: 'https://cdn.discordapp.com/attachments/1480241522694688928/1481282477569081527/file_00000000a3907208b34e2ea1fe7c3f1e.png?ex=69b2bf4f&is=69b16dcf&hm=4d8dcb52159f61674efae5777dc94a146456d425dfef6cb6b3ddedb6abc4320e&' },
-            'friend_room': { name: 'บ้านนานะ', url: 'https://cdn.discordapp.com/attachments/1480241522694688928/1481280067228405891/file_000000002e587208ae4c90ccf38da0c7.png?ex=69b2bd10&is=69b16b90&hm=2a6f833b3500161524c5fdb150308146dc7fe264f370b1e6fbeb54caefac81e8&' },
-                        'friend_room2': { name: 'บ้านอเล็กซ์', url: 'https://cdn.discordapp.com/attachments/1480241522694688928/1481280702552215729/file_0000000097ec72088ed9164a05f5a3b6.png?ex=69b2bda8&is=69b16c28&hm=79be33cdc5fcd4bef98079d4dd2547fbf81c7a4da385d37f0593ef99e236e2dd&' },
-            'random_room': { name: 'ห้องสาธารณะ', url: 'https://cdn.discordapp.com/attachments/1480241522694688928/1481281619917541487/file_0000000056d87208b6b6eb372218d234.png?ex=69b2be83&is=69b16d03&hm=8381f85e5f1f5f6de0c6c6d1613b40627d4c05eddfd8f33fbe166aff15dd2b75&' }
+            'city': { name: 'CU TOWN', src: 'pics/main.png' },
+            'room': { name: 'ห้องส่วนตัวของฉัน', src: 'pics/myroom.png' },
+            'park': { name: 'สวนสาธารณะ CU', src: 'pics/park.png' },
+            'library': { name: 'หอสมุดกลาง', src: 'pics/library.png' },
+            'friend_room': { name: 'บ้านนานะ', src: 'pics/friendroom.png' },
+            'friend_room2': { name: 'บ้านอเล็กซ์', src: 'pics/friendroom2.png' },
+            'random_room': { name: 'ห้องสาธารณะ', src: 'pics/puzzle.png' }
         };
 
         function changeLocation(loc) {
-            document.getElementById('main-body').style.backgroundImage = `url('${locations[loc].url}')`;
+            document.getElementById('main-body').style.backgroundImage = `url('${locations[loc].src}')`;
             document.getElementById('location-name').innerText = locations[loc].name;
             togglePanel(null); // ปิดหน้าต่างลง
             
